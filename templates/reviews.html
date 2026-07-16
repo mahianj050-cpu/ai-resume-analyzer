@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Reviews | Resume Analyzer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .emoji-badge {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .feedback-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .feedback-card:hover {
+            transform: scale(1.01);
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">💬 What Users Are Saying</h2>
+
+        {% if feedbacks %}
+            {% for email, feedback, sentiment, created_at in feedbacks %}
+                {% set sentiment_tag = "Neutral" %}
+                {% set sentiment_class = "text-warning" %}
+                {% set sentiment_emoji = "🙂" %}
+
+                {% if sentiment >= 0.5 %}
+                    {% set sentiment_tag = "Positive" %}
+                    {% set sentiment_class = "text-success" %}
+                    {% set sentiment_emoji = "😄" %}
+                {% elif sentiment < 0 %}
+                    {% set sentiment_tag = "Negative" %}
+                    {% set sentiment_class = "text-danger" %}
+                    {% set sentiment_emoji = "😞" %}
+                {% endif %}
+
+                <div class="card mb-3 shadow-sm feedback-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="emoji-badge">{{ sentiment_emoji }}</span>{{ email.split('@')[0].capitalize() }}
+                        </h5>
+                        <p class="card-text">{{ feedback }}</p>
+                        <p class="card-subtitle small {{ sentiment_class }}">
+                            {{ sentiment_tag }} Feedback • Score: {{ "%.2f"|format(sentiment) }} • {{ created_at }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center">No feedback yet. Be the first to leave your thoughts!</p>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('matcher') }}" class="btn btn-outline-primary">⬅ Back to Matcher</a>
+        </div>
+    </div>
+
+</body>
+</html>

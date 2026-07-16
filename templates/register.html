@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Register - Resume Analyzer</title>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: url("{{ url_for('static', filename='images/resume-bg.jpg') }}") no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(4px);
+    }
+
+    .container {
+        display: flex;
+        width: 90%;
+        max-width: 1000px;
+        background: rgba(255, 255, 255, 0.85); /* Increased opacity */
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        backdrop-filter: blur(6px);
+    }
+
+    .video-section {
+        flex: 1;
+        min-width: 50%;
+    }
+
+    .video-section video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .form-section {
+        flex: 1;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.85); /* Increased opacity */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 2.2rem; /* Increased size */
+    }
+
+    h2 {
+        text-align: center;
+        color: #34495e;
+        margin-bottom: 30px; /* Increased spacing */
+        font-size: 1.5rem; /* Increased size */
+    }
+
+    .form-group {
+        margin-bottom: 20px; /* Added consistent spacing */
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px; /* Better spacing */
+        color: #333;
+        font-size: 16px; /* Standardized size */
+    }
+
+    input[type="email"],
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 14px; /* Increased padding */
+        font-size: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        transition: border 0.3s;
+        font-weight:700;
+    }
+
+    input:focus {
+        border-color: #4b6cb7;
+        outline: none;
+    }
+
+    button {
+        margin-top: 30px; /* Increased spacing */
+        padding: 15px; /* Increased padding */
+        width: 100%;
+        background: linear-gradient(90deg, #4b6cb7, #182848);
+        color: white;
+        font-size: 17px; /* Increased size */
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    button:hover {
+        background: linear-gradient(90deg, #182848, #4b6cb7);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .login-prompt {
+        text-align: center;
+        margin-top: 25px; /* Increased spacing */
+        font-size: 20px; Increased size */
+        font-weight: 600;
+    }
+
+    .login-prompt a {
+        color: #182848;
+        font-weight: 600; /* Made bolder */
+        text-decoration: none;
+    }
+
+    .login-prompt a:hover {
+        text-decoration: underline;
+    }
+
+    .password-container {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .password-container input {
+       padding-right: 40px;
+       width: 100%;
+       height: 45px;  /* Set fixed height for consistency */
+       padding: 10px 15px;  /* Adjust as needed */
+       font-size: 16px;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 55%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+        z-index: 2;
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+            height: auto;
+        }
+
+        .video-section {
+            height: 200px;
+        }
+
+        .form-section {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+
+
+</head>
+<body>
+    <div class="container">
+        <div class="video-section">
+            <video autoplay muted loop playsinline>
+                <source src="{{ url_for('static', filename='videos/analyzer1.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="form-section">
+            <form method="POST">
+                <h1>Resume Analyzer</h1>
+                <h2>Create Your Account</h2>
+                {% with messages = get_flashed_messages(category_filter=["register-success", "register-warning", "register-danger"]) %}
+                    {% if messages %}
+                        <div class="alert alert-{% if 'success' in messages[0].categories %}success{% elif 'warning' in messages[0].categories %}warning{% else %}danger{% endif %} alert-dismissible fade show">
+                            {{ messages[0] }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
+
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" required>
+
+                <label for="password">Password:</label>
+                <div class="password-container" style="position: relative;">
+                    <input type="password" name="password" id="password" required>
+                    <i class="fas fa-eye-slash toggle-password"
+                       style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                </div>
+
+                <label for="confirm_password">Confirm Password:</label>
+                <div class="password-container" style="position: relative;">
+                    <input type="password" name="confirm_password" id="confirm_password" required>
+                    <i class="fas fa-eye-slash toggle-password"
+                       style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                </div>
+
+                <button type="submit">Register</button>
+
+               <p class="login-prompt">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const type = input.type === 'password' ? 'text' : 'password';
+            input.type = type;
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+        });
+    });
+    </script>
+</body>
+</html>

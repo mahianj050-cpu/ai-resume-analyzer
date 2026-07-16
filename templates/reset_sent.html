@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Sent</title>
+    <!-- Use same styles as forgot_password.html -->
+</head>
+<body>
+    <div class="container">
+        <div class="forgot-card text-center">
+            <i class="fas fa-check-circle text-success mb-3" style="font-size: 3rem;"></i>
+            <h2>Reset Link Sent!</h2>
+            <p class="lead">Check your email for instructions to reset your password.</p>
+            <a href="{{ url_for('login') }}" class="btn btn-primary mt-3">
+                <i class="fas fa-sign-in-alt me-2"></i> Return to Login
+            </a>
+        </div>
+    </div>
+</body>
+</html>

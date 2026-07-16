@@ -1,0 +1,30 @@
+# Virtual environments
+venv/
+.venv/
+.venv1/
+myenv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Database files
+*.db
+
+# Log files
+*.log
+feedback.txt
+feedback_log.txt
+
+# VS Code
+.vscode/
+
+# Uploaded files
+uploads/*
+matched_resumes/*
+
+# Keep empty folders
+!uploads/.gitkeep
+!matched_resumes/.gitkeep
+.idea/
+static/videos/intro_files/

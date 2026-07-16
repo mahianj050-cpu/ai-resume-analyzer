@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #f0f4f8;
+            color: #333;
+            text-align: center;
+            padding: 60px 20px;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        .dark-mode {
+            background: #121212;
+            color: #f0f0f0;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 25px;
+            padding: 50px 30px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .dark-mode .container {
+            background: #1e1e1e;
+        }
+
+        .emoji {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        .btn {
+            margin: 10px;
+            padding: 12px 28px;
+            font-size: 1em;
+            border: none;
+            border-radius: 12px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .secondary-btn {
+            background: #fdd835;
+            color: #222;
+        }
+
+        .secondary-btn:hover {
+            background: #fbc02d;
+        }
+
+        .toggle-dark {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #666;
+        }
+
+        .dark-mode .toggle-dark {
+            color: #ccc;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">👍</div>
+        <h1>Thank You, {{ name }}!</h1>
+        <p>Your feedback means a lot to us! 💬✨</p>
+        <button class="btn" onclick="window.location.href='/matcher'">🔄 Back to Matcher</button>
+        <a href="{{ url_for('reviews') }}" class="btn secondary-btn">🌟 Read Reviews</a>
+        <div class="toggle-dark" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</div>
+    </div>
+
+    <!-- Confetti effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 }
+        });
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>

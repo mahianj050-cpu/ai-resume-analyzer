@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer | AI-Powered Candidate Screening</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --gradient-primary: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --gradient-accent: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+
+            /* Light mode colors */
+            --bg-color: #c8dbe7;
+            --text-color: #1B1B1B ;
+            --card-bg: #f0f9ff;
+            --input-bg:#e8f5e9 ;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0,0,0,0.08);
+            --highlight-bg: #ffeb3b ;
+            --preview-bg: white;
+        }
+
+        .dark-mode {
+            /* Dark mode colors */
+            --bg-color:#2d3748;
+            --text-color:  #ffffff;
+            --card-bg: #4a5568;
+            --input-bg:#2a3439;
+            --border-color: #718096;
+            --shadow-color: rgba(0,0,0,0.3);
+            --highlight-bg: #ffeb3b;
+            --preview-bg: #2d2d2d;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .hero-section {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 4rem 0 6rem;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-color);
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .hero-section p.lead {
+            font-size: 1.5rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow-color);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            background: var(--card-bg);
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 50px var(--shadow-color);
+        }
+
+        .card-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.8rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            border-bottom: none;
+            position: relative;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color);
+        }
+
+        .card-header i {
+            margin-right: 12px;
+            font-size: 1.5rem;
+            vertical-align: middle;
+        }
+
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        .form-control, .custom-file-input {
+            border-radius: 12px;
+            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        .form-control:focus, .custom-file-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.2);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        textarea.form-control {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.4s;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--card-bg);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: var(--text-color);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3a0ca3;
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+        }
+
+        .custom-file-label {
+            border-radius: 12px;
+            padding: 15px 20px;
+            height: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .custom-file-label::after {
+            content: "Browse";
+            height: auto;
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            background: var(--gradient-accent);
+            color: white;
+            font-weight: 500;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 15px 40px var(--shadow-color);
+            transform: translateY(-10px);
+        }
+
+        .feature-card h4 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .feature-card p {
+            color: var(--text-color);
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        #loadingSpinner {
+            display: none;
+        }
+
+        .spinner-border {
+            width: 4rem;
+            height: 4rem;
+            border-width: 0.3em;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--input-bg);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover .upload-icon {
+            transform: scale(1.1);
+            color: var(--secondary-color);
+        }
+
+        .how-it-works {
+            background-color: var(--card-bg);
+            padding: 5rem 0;
+            margin-top: 4rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSg2Nyw5NywyMzgsMC4wMykiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IGZpbGw9InVybCgjcGF0dGVybikiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiLz48L3N2Zz4=');
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 20px;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            flex-shrink: 0;
+        }
+
+        .how-it-works h4 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .how-it-works p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            padding-left: 70px;
+            opacity: 0.9;
+        }
+
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        /* Results styling */
+        .resume-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .resume-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .badge {
+            padding: 0.5em 0.8em;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-info {
+            background-color: var(--primary-color);
+        }
+
+        .highlighted-preview {
+            background: var(--preview-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        mark {
+            background-color: var(--highlight-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 0.3em;
+            color: #000;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.4s;
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Dark mode toggle */
+        .theme-switch-wrapper {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        /* Add this to your existing style section */
+        .dark-mode .form-group label,
+        .dark-mode .form-group strong,
+        .dark-mode .form-control::placeholder,
+        .dark-mode .form-text,
+        .dark-mode .upload-area h4,
+        .dark-mode .upload-area p {
+        color: white !important;
+        }
+
+       .dark-mode textarea.form-control::placeholder {
+           color: white !important;
+           opacity: 0.7;
+       }
+
+       .dark-mode .upload-area p.text-muted {
+           color: rgba(255, 255, 255, 0.7) !important;
+       }
+
+       .dark-mode .form-text.text-muted {
+           color: rgba(255, 255, 255, 0.7) !important;
+       }
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: var(--gradient-primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider i {
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 10px;
+        }
+
+        .fa-sun {
+            left: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .fa-moon {
+            right: 8px;
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+
+        input:checked + .slider .fa-sun {
+            opacity: 1;
+        }
+
+        input:checked + .slider .fa-moon {
+            opacity: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p.lead {
+                font-size: 1.2rem;
+            }
+
+            .card-header {
+                font-size: 1.5rem;
+                padding: 1.5rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .how-it-works h4 {
+                font-size: 1.2rem;
+            }
+
+            .how-it-works p {
+                padding-left: 0;
+                margin-left: 70px;
+            }
+
+            .theme-switch-wrapper {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+<body>
+<!-- Top Navigation Bar -->
+<!-- Top Navigation Bar -->
+<nav class="top-navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: var(--gradient-primary); color: white; font-family: 'Poppins', sans-serif;">
+    <!-- Left: Logo / App Name with Dropdown -->
+    <div class="dropdown">
+        <button class="dropbtn" style="font-size: 1.4rem; font-weight: 600; background-color: #4361ee; padding: 8px 16px; border-radius: 25px; border: none; color: white; cursor: pointer;">
+            <i class="fas fa-user-tie mr-2"></i> AI Resume Analyzer <i class="fas fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 8px;">
+            <a href="{% if current_user.is_admin %}{{ url_for('view_feedback') }}{% else %}{{ url_for('reviews') }}{% endif %}"
+               style="color: black; padding: 12px 16px; text-decoration: none; display: block;">
+               <i class="fas fa-comment-alt mr-2"></i> View Feedback
+            </a>
+            <a href="{{ url_for('logout') }}" style="color: black; padding: 12px 16px; text-decoration: none; display: block;">
+               <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Right: Theme Toggle -->
+    <div class="nav-right" style="display: flex; align-items: center; gap: 20px;">
+        <!-- Theme Toggle -->
+        <label class="theme-switch" for="checkbox" style="cursor: pointer; background-color: #4361ee; padding: 8px 16px; border-radius: 25px;">
+            <input type="checkbox" id="checkbox" style="display: none;" />
+            <div class="slider round" style="display: flex; align-items: center; gap: 5px; color: white;">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </div>
+        </label>
+    </div>
+</nav>
+
+
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <div class="floating" style="margin-bottom: 2rem;">
+                <i class="fas fa-user-tie" style="font-size: 5rem; opacity: 0.8;"></i>
+            </div>
+            <h1 class="mb-4">AI Resume Analyzer</h1>
+            <p class="lead">Revolutionize your hiring process with intelligent candidate matching</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-10 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-search mr-2"></i>Job Description and Resume Analyzer
+                    </div>
+                    <div class="card-body">
+                        <form id="matcherForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="job_description"><strong>Job Description:</strong></label>
+                                <textarea class="form-control" id="job_description" name="job_description" rows="5" required placeholder="Paste the job description here..."></textarea>
+                            </div>
+
+                            <!-- Number of resumes to show -->
+                            <div class="form-group">
+                                <label for="num_resumes"><strong>Number of Top Resumes to Display:</strong></label>
+                                <input type="number"
+                                       class="form-control"
+                                       id="num_resumes"
+                                       name="num_resumes"
+                                       min="1"
+                                       max="50"
+                                       value="10"
+                                       required
+                                       placeholder="Enter number between 1-50">
+                                <small class="form-text text-muted">You can view up to 50 top matches</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="resumes"><strong>Upload Resumes:</strong></label>
+
+                                <!-- Improved Upload Area -->
+                                <div class="upload-area" onclick="document.getElementById('resumes').click()">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <h4>Drag & Drop or Click to Browse</h4>
+                                    <p class="text-muted">Supported formats: PDF, DOCX, TXT</p>
+                                    <div class="custom-file d-none">
+                                        <input type="file" class="custom-file-input" id="resumes" name="resumes" multiple required accept=".pdf, .docx, .txt">
+                                        <label class="custom-file-label" for="resumes">Choose files...</label>
+                                    </div>
+                                </div>
+                                <div id="file-selected-info" class="text-center text-muted mb-3"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block mt-3 py-3">
+                                <i class="fas fa-magic mr-2"></i> Match Resumes
+                            </button>
+                        </form>
+
+                        <div id="loadingSpinner" class="text-center mt-4" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <h5 class="mt-4">Analyzing resumes with AI...</h5>
+                            <p class="text-muted">This may take a few moments depending on the number of resumes</p>
+                            <div class="progress mt-4" style="height: 8px; border-radius: 4px;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; background: var(--gradient-primary);"></div>
+                            </div>
+                        </div>
+
+                        <div id="results" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>Lightning Fast</h4>
+                    <p>Process hundreds of resumes in seconds with our optimized AI algorithms, saving you countless hours of manual screening.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Smart Analysis</h4>
+                    <p>Our system understands context, not just keywords, to find truly qualified candidates who match your requirements.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>Detailed Insights</h4>
+                    <p>Get comprehensive matching reports with visualizations that help you make informed hiring decisions quickly.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="how-it-works">
+            <div class="container">
+                <h2 class="text-center mb-5">How It Works</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-5">
+                        <h4><span class="step-number">1</span> Paste Job Description</h4>
+                        <p>Simply copy and paste the job description you're hiring for. Our advanced NLP system will analyze and extract key requirements, skills, and qualifications.</p>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h4><span class="step-number">2</span> Upload Resumes</h4>
+                        <p>Upload multiple resumes in PDF, DOCX, or TXT format. Our system can handle hundreds of resumes at once, parsing them with perfect accuracy.</p>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h4><span class="step-number">3</span> AI Processing</h4>
+                        <p>Our sophisticated AI compares each resume against the job description using semantic analysis, contextual understanding, and skill matching.</p>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h4><span class="step-number">4</span> Get Results</h4>
+                        <p>Receive perfectly ranked candidates with match scores, highlighted keywords, visual comparisons, and actionable insights to streamline your hiring.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 AI Resume Analyzer | Transform Your Hiring Process</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Dark/Light mode toggle functionality
+            const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+            const currentTheme = localStorage.getItem('theme');
+
+            if (currentTheme) {
+                document.documentElement.setAttribute('class', currentTheme);
+                if (currentTheme === 'dark-mode') {
+                    toggleSwitch.checked = true;
+                }
+            }
+
+            function switchTheme(e) {
+                if (e.target.checked) {
+                    document.documentElement.setAttribute('class', 'dark-mode');
+                    localStorage.setItem('theme', 'dark-mode');
+                } else {
+                    document.documentElement.setAttribute('class', 'light-mode');
+                    localStorage.setItem('theme', 'light-mode');
+                }
+            }
+
+            toggleSwitch.addEventListener('change', switchTheme, false);
+
+            // Update file input label with better UI
+            $('#resumes').on('change', function() {
+                var files = $(this)[0].files;
+                var label = '';
+
+                if (files.length > 1) {
+                    label = `<div class="alert alert-success" role="alert">
+                                <i class="fas fa-check-circle mr-2"></i>${files.length} files selected
+                            </div>`;
+                } else if (files.length === 1) {
+                    label = `<div class="alert alert-success" role="alert">
+                                <i class="fas fa-file-alt mr-2"></i>${files[0].name}
+                            </div>`;
+                } else {
+                    label = '';
+                }
+
+                $('#file-selected-info').html(label);
+            });
+
+            // Drag and drop functionality
+            $('.upload-area').on('dragover', function(e) {
+                e.preventDefault();
+                $(this).css('border-color', '#4361ee');
+                $(this).css('background-color', 'rgba(67, 97, 238, 0.1)');
+            });
+
+            $('.upload-area').on('dragleave', function(e) {
+                e.preventDefault();
+                $(this).css('border-color', 'var(--border-color)');
+                $(this).css('background-color', 'var(--input-bg)');
+            });
+
+            $('.upload-area').on('drop', function(e) {
+                e.preventDefault();
+                $(this).css('border-color', 'var(--border-color)');
+                $(this).css('background-color', 'var(--input-bg)');
+
+                var files = e.originalEvent.dataTransfer.files;
+                $('#resumes')[0].files = files;
+                $('#resumes').trigger('change');
+            });
+
+            $('#matcherForm').on('submit', function(e) {
+                e.preventDefault();
+                $('#results').html('');
+                $('#loadingSpinner').show();
+
+                let formData = new FormData(this);
+                // Validate number input
+                const numResumes = parseInt($('#num_resumes').val());
+                if (numResumes < 1 || numResumes > 50) {
+                   alert('Please enter a number between 1 and 50');
+                   $('#loadingSpinner').hide();
+                   return;
+                }
+                $.ajax({
+                    url: '/matcher',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        $('#loadingSpinner').hide();
+                        $('#results').html(data);
+
+                        // Smooth scroll to results
+                        $('html, body').animate({
+                            scrollTop: $('#results').offset().top - 20
+                        }, 500);
+                    },
+                    error: function(err) {
+                        $('#loadingSpinner').hide();
+                        $('#results').html(`
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                <strong>Error!</strong> Something went wrong during processing.
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
+
+        // Dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.querySelector('.dropdown');
+            const dropbtn = document.querySelector('.dropbtn');
+
+        // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!dropdown.contains(event.target)) {
+                   document.querySelector('.dropdown-content').style.display = 'none';
+                }
+            });
+
+            // Toggle dropdown
+            dropbtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const content = document.querySelector('.dropdown-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>
